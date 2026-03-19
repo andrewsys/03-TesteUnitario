@@ -62,8 +62,14 @@ public class Conta
     /// </summary>
     public void Sacar(decimal valor)
     {
-        // TODO: Implemente usando TDD
-        throw new NotImplementedException();
+        if (valor <= 0)
+            throw new ArgumentException("O valor do saque deve ser maior que zero.", nameof(valor));
+        if (!Ativa)
+            throw new InvalidOperationException("Não é possível sacar de uma conta inativa.");
+        if (valor > Saldo)
+            throw new InvalidOperationException("Saldo insuficiente para efetuar o saque.");
+
+        Saldo -= valor;
     }
 
     /// <summary>
@@ -76,8 +82,17 @@ public class Conta
     /// </summary>
     public void Transferir(Conta destino, decimal valor)
     {
-        // TODO: Implemente usando TDD
-        throw new NotImplementedException();
+        if (valor <= 0)
+            throw new ArgumentException("O valor da transferência deve ser maior que zero.", nameof(valor));
+        if (!Ativa)
+            throw new InvalidOperationException("Não é possível transferir de uma conta inativa.");
+        if (destino == null || !destino.Ativa)
+            throw new InvalidOperationException("A conta destino deve estar ativa.");
+        if (valor > Saldo)
+            throw new InvalidOperationException("Saldo insuficiente para efetuar a transferência.");
+
+        Sacar(valor);
+        destino.Depositar(valor);
     }
 
     /// <summary>
@@ -89,7 +104,11 @@ public class Conta
     /// </summary>
     public void Encerrar()
     {
-        // TODO: Implemente usando TDD
-        throw new NotImplementedException();
+        if (!Ativa)
+            throw new InvalidOperationException("A conta já está inativa.");
+        if (Saldo != 0)
+            throw new InvalidOperationException("Não é possível encerrar uma conta com saldo positivo.");
+
+        Ativa = false;
     }
 }

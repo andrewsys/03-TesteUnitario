@@ -182,6 +182,7 @@ public class ContaTests
     {
         // Arrange
         var conta = new Conta("Maria", 100);
+        conta.Sacar(100);  // Esvazia a conta
         conta.Encerrar();
 
         // Act & Assert
